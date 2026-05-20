@@ -1,0 +1,23 @@
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+__debug_bin
+go.work
+
+# Vendor directory (uncomment if not using vendoring)
+# vendor/
+
+# Logs
+*.log
+*.log.gz
+
+# Temp and uploads
+tmp/
+uploads/
+*/cmd/uploads
+
+.env
