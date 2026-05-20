@@ -1,455 +1,529 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GO ICO / MODERN BRUTALIST</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --bg: #ffffff;
-            --text: #000000;
-            --border: #000000;
-            --accent: #ff3366;
-            --accent-text: #ffffff;
-            --hover-bg: #f0f0f0;
-        }
+      :root {
+        --bg: #ffffff;
+        --text: #000000;
+        --border: #000000;
+        --accent: #ff3366;
+        --accent-text: #ffffff;
+        --hover-bg: #f0f0f0;
+      }
 
-        [data-theme="dark"] {
-            --bg: #1a1a1a;
-            --text: #ffffff;
-            --border: #404040;
-            --accent: #0066ff;
-            --accent-text: #ffffff;
-            --hover-bg: #2a2a2a;
-        }
+      [data-theme="dark"] {
+        --bg: #1a1a1a;
+        --text: #ffffff;
+        --border: #404040;
+        --accent: #0066ff;
+        --accent-text: #ffffff;
+        --hover-bg: #2a2a2a;
+      }
 
-        [data-theme="black"] {
-            --bg: #000000;
-            --text: #ffffff;
-            --border: #333333;
-            --accent: #ccff00;
-            --accent-text: #000000;
-            --hover-bg: #111111;
-        }
+      [data-theme="black"] {
+        --bg: #000000;
+        --text: #ffffff;
+        --border: #333333;
+        --accent: #ccff00;
+        --accent-text: #000000;
+        --hover-bg: #111111;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            text-transform: uppercase;
-            transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        text-transform: uppercase;
+        transition:
+          background-color 0.3s,
+          color 0.3s;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
 
-        /* Theme Bar */
-        .theme-bar {
-            display: flex;
-            border-bottom: 1px solid var(--border);
-        }
-        .theme-btn {
-            flex: 1;
-            background: transparent;
-            color: var(--text);
-            border: none;
-            border-right: 1px solid var(--border);
-            padding: 1rem;
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .theme-btn:last-child { border-right: none; }
-        .theme-btn:hover, .theme-btn.active {
-            background: var(--text);
-            color: var(--bg);
-        }
+      /* Theme Bar */
+      .theme-bar {
+        display: flex;
+        border-bottom: 1px solid var(--border);
+      }
+      .theme-btn {
+        flex: 1;
+        background: transparent;
+        color: var(--text);
+        border: none;
+        border-right: 1px solid var(--border);
+        padding: 1rem;
+        font-family: "Inter", sans-serif;
+        font-weight: 700;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .theme-btn:last-child {
+        border-right: none;
+      }
+      .theme-btn:hover,
+      .theme-btn.active {
+        background: var(--text);
+        color: var(--bg);
+      }
 
-        /* Layout */
+      /* Layout */
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        flex-grow: 1;
+      }
+      @media (max-width: 900px) {
         .layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            flex-grow: 1;
+          grid-template-columns: 1fr;
         }
-        @media (max-width: 900px) {
-            .layout { grid-template-columns: 1fr; }
-        }
+      }
 
-        /* Hero / Typography */
+      /* Hero / Typography */
+      .hero {
+        border-right: 1px solid var(--border);
+        padding: 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      @media (max-width: 900px) {
         .hero {
-            border-right: 1px solid var(--border);
-            padding: 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+          padding: 2rem;
         }
-        @media (max-width: 900px) {
-            .hero { border-right: none; border-bottom: 1px solid var(--border); padding: 2rem;}
-        }
+      }
 
-        .title {
-            font-size: clamp(5rem, 12vw, 10rem);
-            font-weight: 900;
-            line-height: 0.85;
-            letter-spacing: -0.05em;
-            word-wrap: break-word;
-        }
+      .title {
+        font-size: clamp(5rem, 12vw, 10rem);
+        font-weight: 900;
+        line-height: 0.85;
+        letter-spacing: -0.05em;
+        word-wrap: break-word;
+      }
 
-        .subtitle {
-            font-size: 1.5rem;
-            font-weight: 300;
-            margin-top: 2rem;
-            max-width: 400px;
-            line-height: 1.4;
-        }
+      .subtitle {
+        font-size: 1.5rem;
+        font-weight: 300;
+        margin-top: 2rem;
+        max-width: 400px;
+        line-height: 1.4;
+      }
 
-        /* Form Area */
+      /* Form Area */
+      .content {
+        padding: 4rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      @media (max-width: 900px) {
         .content {
-            padding: 4rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+          padding: 2rem;
         }
-        @media (max-width: 900px) {
-            .content { padding: 2rem; }
-        }
+      }
 
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-            max-width: 600px;
-            width: 100%;
-        }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        max-width: 600px;
+        width: 100%;
+      }
 
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
 
-        label {
-            font-size: 1.125rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            display: flex;
-            justify-content: space-between;
-        }
+      label {
+        font-size: 1.125rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        display: flex;
+        justify-content: space-between;
+      }
 
-        select {
-            width: 100%;
-            background: var(--bg);
-            color: var(--text);
-            border: 2px solid var(--border);
-            padding: 1.5rem;
-            font-family: 'Inter', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            border-radius: 0;
-            appearance: none;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.2s;
-        }
-        select:hover, select:focus {
-            background: var(--hover-bg);
-        }
+      select {
+        width: 100%;
+        background: var(--bg);
+        color: var(--text);
+        border: 2px solid var(--border);
+        padding: 1.5rem;
+        font-family: "Inter", sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        border-radius: 0;
+        appearance: none;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.2s;
+      }
+      select:hover,
+      select:focus {
+        background: var(--hover-bg);
+      }
 
-        .drop-zone {
-            width: 100%;
-            background: var(--bg);
-            border: 2px dashed var(--border);
-            padding: 4rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s;
-        }
-        .drop-zone.dragover, .drop-zone:hover {
-            background: var(--hover-bg);
-            border-style: solid;
-        }
-        .drop-zone input[type="file"] {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-        .file-name {
-            font-size: 2rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-            word-break: break-all;
-        }
-        .file-hint {
-            font-size: 1rem;
-            font-weight: 500;
-            opacity: 0.6;
-        }
+      .drop-zone {
+        width: 100%;
+        background: var(--bg);
+        border: 2px dashed var(--border);
+        padding: 4rem 2rem;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.2s;
+      }
+      .drop-zone.dragover,
+      .drop-zone:hover {
+        background: var(--hover-bg);
+        border-style: solid;
+      }
+      .drop-zone input[type="file"] {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .file-name {
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        margin-bottom: 1rem;
+        word-break: break-all;
+      }
+      .file-hint {
+        font-size: 1rem;
+        font-weight: 500;
+        opacity: 0.6;
+      }
 
-        .btn {
-            background: var(--accent);
-            color: var(--accent-text);
-            border: none;
-            padding: 2rem;
-            font-family: 'Inter', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-            text-align: center;
-        }
-        .btn:hover {
-            transform: scale(1.02);
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
+      .btn {
+        background: var(--accent);
+        color: var(--accent-text);
+        border: none;
+        padding: 2rem;
+        font-family: "Inter", sans-serif;
+        font-size: 2.5rem;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        cursor: pointer;
+        transition:
+          transform 0.1s,
+          opacity 0.2s;
+        text-align: center;
+      }
+      .btn:hover {
+        transform: scale(1.02);
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
 
-        /* Toast */
-        .toast-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            z-index: 9999;
+      /* Toast */
+      .toast-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        z-index: 9999;
+      }
+      .toast {
+        background: var(--text);
+        color: var(--bg);
+        padding: 1.5rem 2rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--border);
+        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .toast.error {
+        background: #ff3333;
+        color: #ffffff;
+      }
+      .toast.success {
+        background: #00cc66;
+        color: #ffffff;
+      }
+      .toast .close-btn {
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 2rem;
+        cursor: pointer;
+        font-weight: 300;
+        line-height: 1;
+      }
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
         }
-        .toast {
-            background: var(--text);
-            color: var(--bg);
-            padding: 1.5rem 2rem;
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border);
-            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        to {
+          transform: translateY(0);
         }
-        .toast.error {
-            background: #ff3333;
-            color: #ffffff;
-        }
-        .toast.success {
-            background: #00cc66;
-            color: #ffffff;
-        }
-        .toast .close-btn {
-            background: none;
-            border: none;
-            color: inherit;
-            font-size: 2rem;
-            cursor: pointer;
-            font-weight: 300;
-            line-height: 1;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="theme-bar">
-        <button class="theme-btn" onclick="setTheme('light')" data-theme-btn="light">LIGHT MODE</button>
-        <button class="theme-btn" onclick="setTheme('dark')" data-theme-btn="dark">DARK MODE</button>
-        <button class="theme-btn" onclick="setTheme('black')" data-theme-btn="black">PURE BLACK</button>
+      <button
+        class="theme-btn"
+        onclick="setTheme('light')"
+        data-theme-btn="light"
+      >
+        LIGHT MODE
+      </button>
+      <button
+        class="theme-btn"
+        onclick="setTheme('dark')"
+        data-theme-btn="dark"
+      >
+        DARK MODE
+      </button>
+      <button
+        class="theme-btn"
+        onclick="setTheme('black')"
+        data-theme-btn="black"
+      >
+        PURE BLACK
+      </button>
     </div>
 
     <div class="layout">
-        <header class="hero">
-            <div>
-                <h1 class="title">GO<br>ICO</h1>
+      <header class="hero">
+        <div>
+          <h1 class="title">GO<br />ICO</h1>
+        </div>
+        <p class="subtitle">
+          CONVERT IMAGES TO ICON FORMAT.<br />FAST. PRECISE. UTILITARIAN.
+        </p>
+      </header>
+
+      <main class="content">
+        <form
+          id="upload-form"
+          action="/upload"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="input-group">
+            <label for="size"><span>Resolution</span><span>PX</span></label>
+            <select name="size" id="size">
+              <option value="16">16 × 16</option>
+              <option value="32" selected>32 × 32</option>
+              <option value="48">48 × 48</option>
+              <option value="64">64 × 64</option>
+              <option value="128">128 × 128</option>
+              <option value="256">256 × 256</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>Payload</label>
+            <div class="drop-zone" id="drop-zone">
+              <input
+                type="file"
+                name="images"
+                id="file-input"
+                multiple
+                accept="image/*"
+              />
+              <div class="file-name" id="file-name-display">
+                CLICK OR DRAG FILES
+              </div>
+              <div class="file-hint">ACCEPTS PNG, JPG, WEBP</div>
             </div>
-            <p class="subtitle">CONVERT IMAGES TO ICON FORMAT.<br>FAST. PRECISE. UTILITARIAN.</p>
-        </header>
+          </div>
 
-        <main class="content">
-            <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
-                <div class="input-group">
-                    <label for="size"><span>Resolution</span><span>PX</span></label>
-                    <select name="size" id="size">
-                        <option value="16">16 × 16</option>
-                        <option value="32" selected>32 × 32</option>
-                        <option value="48">48 × 48</option>
-                        <option value="64">64 × 64</option>
-                        <option value="128">128 × 128</option>
-                        <option value="256">256 × 256</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>Payload</label>
-                    <div class="drop-zone" id="drop-zone">
-                        <input type="file" name="images" id="file-input" multiple accept="image/*" />
-                        <div class="file-name" id="file-name-display">CLICK OR DRAG FILES</div>
-                        <div class="file-hint">ACCEPTS PNG, JPG, WEBP</div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn">EXECUTE</button>
-            </form>
-        </main>
+          <button type="submit" class="btn">EXECUTE</button>
+        </form>
+      </main>
     </div>
 
     <div class="toast-container" id="toast-container"></div>
 
     <script>
-        // Theme Management
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-theme-btn') === theme);
-            });
-        }
+      // Theme Management
+      function setTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+        document.querySelectorAll(".theme-btn").forEach((btn) => {
+          btn.classList.toggle(
+            "active",
+            btn.getAttribute("data-theme-btn") === theme,
+          );
+        });
+      }
 
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme) {
-            setTheme(savedTheme);
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme('dark');
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme) {
+        setTheme(savedTheme);
+      } else if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        setTheme("dark");
+      } else {
+        setTheme("black");
+      }
+
+      // File Input Logic
+      const fileInput = document.getElementById("file-input");
+      const fileNameDisplay = document.getElementById("file-name-display");
+      const dropZone = document.getElementById("drop-zone");
+
+      fileInput.addEventListener("change", (e) => {
+        const files = e.target.files;
+        if (files.length > 0) {
+          if (files.length === 1) {
+            fileNameDisplay.textContent = files[0].name.toUpperCase();
+          } else {
+            fileNameDisplay.textContent = `${files.length} FILES SELECTED`;
+          }
+          dropZone.style.borderStyle = "solid";
         } else {
-            setTheme('black');
+          fileNameDisplay.textContent = "CLICK OR DRAG FILES";
+          dropZone.style.borderStyle = "dashed";
         }
+      });
 
-        // File Input Logic
-        const fileInput = document.getElementById("file-input");
-        const fileNameDisplay = document.getElementById("file-name-display");
-        const dropZone = document.getElementById("drop-zone");
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          (e) => {
+            e.preventDefault();
+            dropZone.classList.add("dragover");
+          },
+          false,
+        );
+      });
 
-        fileInput.addEventListener("change", (e) => {
-            const files = e.target.files;
-            if (files.length > 0) {
-                if (files.length === 1) {
-                    fileNameDisplay.textContent = files[0].name.toUpperCase();
-                } else {
-                    fileNameDisplay.textContent = `${files.length} FILES SELECTED`;
-                }
-                dropZone.style.borderStyle = 'solid';
-            } else {
-                fileNameDisplay.textContent = "CLICK OR DRAG FILES";
-                dropZone.style.borderStyle = 'dashed';
-            }
-        });
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          (e) => {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
+          },
+          false,
+        );
+      });
 
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                dropZone.classList.add('dragover');
-            }, false);
-        });
+      // Toast System
+      function showToast(message, type = "success") {
+        const container = document.getElementById("toast-container");
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
 
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('dragover');
-            }, false);
-        });
-
-        // Toast System
-        function showToast(message, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            toast.innerHTML = `
+        toast.innerHTML = `
                 <span>${message}</span>
                 <button class="close-btn">&times;</button>
             `;
 
-            // Remove previous toasts to keep it clean (Brutalist style: one status at a time)
-            container.innerHTML = ''; 
-            container.appendChild(toast);
+        // Remove previous toasts to keep it clean (Brutalist style: one status at a time)
+        container.innerHTML = "";
+        container.appendChild(toast);
 
-            const removeToast = () => {
-                toast.remove();
-            };
+        const removeToast = () => {
+          toast.remove();
+        };
 
-            toast.querySelector('.close-btn').addEventListener('click', removeToast);
-            setTimeout(removeToast, 4000);
+        toast
+          .querySelector(".close-btn")
+          .addEventListener("click", removeToast);
+        setTimeout(removeToast, 4000);
+      }
+
+      // Form Submit
+      const form = document.getElementById("upload-form");
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        if (fileInput.files.length === 0) {
+          showToast("ERROR: NO FILES DETECTED", "error");
+          return;
         }
 
-        // Form Submit
-        const form = document.getElementById('upload-form');
-        const submitBtn = form.querySelector('button[type="submit"]');
+        const formData = new FormData(form);
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = "PROCESSING...";
+        submitBtn.disabled = true;
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (fileInput.files.length === 0) {
-                showToast("ERROR: NO FILES DETECTED", "error");
-                return;
+        try {
+          const response = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!response.ok) {
+            const errText = await response.text();
+            showToast(`ERROR: ${errText.toUpperCase()}`, "error");
+          } else {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+
+            let filename = "icons.zip";
+            const disposition = response.headers.get("Content-Disposition");
+            if (disposition && disposition.indexOf("attachment") !== -1) {
+              const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+              const matches = filenameRegex.exec(disposition);
+              if (matches != null && matches[1]) {
+                filename = matches[1].replace(/['"]/g, "");
+              }
             }
 
-            const formData = new FormData(form);
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'PROCESSING...';
-            submitBtn.disabled = true;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
 
-            try {
-                const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                });
+            showToast("SUCCESS: PAYLOAD DELIVERED", "success");
 
-                if (!response.ok) {
-                    const errText = await response.text();
-                    showToast(`ERROR: ${errText.toUpperCase()}`, "error");
-                } else {
-                    const blob = await response.blob();
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    
-                    let filename = "icons.zip"; 
-                    const disposition = response.headers.get('Content-Disposition');
-                    if (disposition && disposition.indexOf('attachment') !== -1) {
-                        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        const matches = filenameRegex.exec(disposition);
-                        if (matches != null && matches[1]) { 
-                            filename = matches[1].replace(/['"]/g, '');
-                        }
-                    }
-                    
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    a.remove();
-                    
-                    showToast("SUCCESS: PAYLOAD DELIVERED", "success");
-                    
-                    form.reset();
-                    fileNameDisplay.textContent = "CLICK OR DRAG FILES";
-                    dropZone.style.borderStyle = 'dashed';
-                }
-            } catch (error) {
-                showToast("ERROR: CONNECTION FAILED", "error");
-            } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }
-        });
+            form.reset();
+            fileNameDisplay.textContent = "CLICK OR DRAG FILES";
+            dropZone.style.borderStyle = "dashed";
+          }
+        } catch (error) {
+          showToast("ERROR: CONNECTION FAILED", "error");
+        } finally {
+          submitBtn.textContent = originalText;
+          submitBtn.disabled = false;
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

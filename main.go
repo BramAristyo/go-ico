@@ -3,32 +3,66 @@ package main
 import (
 	"archive/zip"
 	_ "embed"
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/bramAristyo/go-ico/pkg"
+	"github.com/joho/godotenv"
 )
 
 //go:embed static/index.html
 var indexHTML []byte
 
-func main() {
+//go:embed static/favicon.ico
+var faviconICO []byte
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+func basicMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Content-Type-Options", "nosniff")
+		w.Header().Set("X-Frame-Options", "DENY")
+		w.Header().Set("X-XSS-Protection", "1; mode=block")
+
+		start := time.Now()
+		next(w, r)
+		log.Printf("%s %s %s", r.Method, r.URL.Path, time.Since(start))
+	}
+}
+
+func main() {
+	_ = godotenv.Load()
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("/", basicMiddleware(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/" {
+			http.NotFound(w, r)
+			return
+		}
 		w.Header().Set("Content-Type", "text/html")
 		w.Write(indexHTML)
+	}))
+
+	mux.HandleFunc("/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/x-icon")
+		w.Write(faviconICO)
 	})
 
-	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/upload", basicMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
 
-		r.ParseMultipartForm(50 << 20)
+		// Limit total request size (e.g., 50MB)
+		r.Body = http.MaxBytesReader(w, r.Body, 50<<20)
+		if err := r.ParseMultipartForm(50 << 20); err != nil {
+			http.Error(w, "upload too large or invalid", http.StatusBadRequest)
+			return
+		}
 
 		sizeParam := r.FormValue("size")
 		if sizeParam == "" {
@@ -53,7 +87,6 @@ func main() {
 				http.Error(w, "open error: "+err.Error(), http.StatusInternalServerError)
 				return
 			}
-
 			defer f.Close()
 
 			src, err := pkg.DecodeImage(f)
@@ -97,8 +130,23 @@ func main() {
 
 			pkg.EncodeICO(entry, pkg.ResizeImage(src, sz))
 		}
-	})
+	}))
 
-	fmt.Println("server running at http://localhost:8099")
-	http.ListenAndServe(":8099", nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8099"
+	}
+
+	server := &http.Server{
+		Addr:         ":" + port,
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+
+	log.Printf("server running at http://localhost:%s", port)
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Fatalf("could not listen on %s: %v", port, err)
+	}
 }
