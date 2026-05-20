@@ -1,6 +1,8 @@
 package main
 
 import (
+	"archive/zip"
+	_ "embed"
 	"fmt"
 	"net/http"
 	"path/filepath"
@@ -10,10 +12,20 @@ import (
 	"github.com/bramAristyo/go-ico/pkg"
 )
 
+//go:embed static/index.html
+var indexHTML []byte
+
 func main() {
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		w.Write(indexHTML)
+	})
+
 	http.HandleFunc("/upload", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+			return
 		}
 
 		r.ParseMultipartForm(50 << 20)
@@ -58,7 +70,35 @@ func main() {
 			pkg.EncodeICO(w, img)
 			return
 		}
+
+		w.Header().Set("Content-Type", "application/zip")
+		w.Header().Set("Content-Disposition", `attachment; filename="icons.zip"`)
+
+		zw := zip.NewWriter(w)
+		defer zw.Close()
+
+		for _, fh := range files {
+			f, err := fh.Open()
+			if err != nil {
+				continue
+			}
+
+			src, err := pkg.DecodeImage(f)
+			f.Close()
+			if err != nil {
+				continue
+			}
+
+			name := strings.TrimSuffix(fh.Filename, filepath.Ext(fh.Filename)) + ".ico"
+			entry, err := zw.Create(name)
+			if err != nil {
+				continue
+			}
+
+			pkg.EncodeICO(entry, pkg.ResizeImage(src, sz))
+		}
 	})
-	fmt.Println("server running at http://localhost:8080")
+
+	fmt.Println("server running at http://localhost:8099")
 	http.ListenAndServe(":8099", nil)
 }
